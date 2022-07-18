@@ -5,7 +5,7 @@ const security = require("./middleware/security.js");
 const { NotFoundError } = require("./utils/errors");
 
 const productRoutes = require("./routes/product.js");
-// const wishlistRoutes = require("./routes/wishlist");
+const wishlistRoutes = require("./routes/wishlist");
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.use(cors());
 app.use(security.extractUserFromJwt);
 
 app.use("/product", productRoutes);
-// app.use("/wishlist", wishlistRoutes);
+app.use("/wishlist", wishlistRoutes);
 
 app.get("/", async (req, res, next) => {
   res.status(200).json({ ping: "pong" });

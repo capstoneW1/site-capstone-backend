@@ -39,6 +39,26 @@ class Product {
     }
   }
 
+  static async getProductById(productId) {
+    const options = {
+      url: `https://the-sneaker-database.p.rapidapi.com/sneakers/${productId}`,
+      method: "GET",
+      params: { sneakerId: productId },
+      headers: {
+        "X-RapidAPI-Key": "b644290787mshfee7bb22060308dp13940bjsnf0ed4c49b267",
+        "X-RapidAPI-Host": "the-sneaker-database.p.rapidapi.com",
+      },
+    };
+    let response = null;
+    try {
+      response = await axios.request(options);
+      //   console.log("getProducts response:", response);
+      return response.data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   static async searchProducts(q) {
     const options = {
       method: "GET",

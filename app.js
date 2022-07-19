@@ -4,6 +4,7 @@ const cors = require("cors");
 const security = require("./middleware/security.js");
 const { NotFoundError } = require("./utils/errors");
 
+const authRoutes = require("./routes/auth")
 const productRoutes = require("./routes/product.js");
 const wishlistRoutes = require("./routes/wishlist");
 
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(cors());
 app.use(security.extractUserFromJwt);
 
+app.use("/auth", authRoutes)
 app.use("/product", productRoutes);
 app.use("/wishlist", wishlistRoutes);
 

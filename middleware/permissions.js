@@ -1,22 +1,22 @@
-//const Nutrition = require("../models/nutrition");
+const Wishlist = require("../models/wishlist");
 const { BadRequestError, ForbiddenError } = require("../utils/errors");
 
-const authedUserOwnsNutrition = async (req, res, next) => {
+const authedUserOwnsWishlist = async (req, res, next) => {
   try {
-    // const { user } = res.locals;
-    // const { nutritionId } = req.params;
-    // //const nutrition = await Nutrition.fetchNutritionById(nutritionId);
+    const { user } = res.locals;
+    const { wishlistId } = req.params.wishlistId;
+    const wishlist = await Wishlist.fetchWishlistById(wishlistId);
 
-    // if (nutrition.user_id !== user.id) {
-    //   throw new ForbiddenError(
-    //     "User is not allowed to fetch nutritions that they do not own."
-    //   );
-    // }
+    if (wishlist.user_id !== user.id) {
+      throw new ForbiddenError(
+        "User is not allowed to fetch wishlist that they do not own."
+      );
+    }
 
-    //res.locals.nutrition = nutrition;
+    res.locals.wishlist = wishlist;
     return next();
   } catch (err) {
     return next(err);
   }
 };
-module.exports = { authedUserOwnsNutrition };
+module.exports = { authedUserOwnsWishlist };

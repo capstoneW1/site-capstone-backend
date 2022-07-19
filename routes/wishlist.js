@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.post("/", async (req, res, next) => {
   try {
+    // req.body consists of
+    // { user_id, shoe_id }
     const wishlistItem = await Wishlist.createWishlistItem(req.body);
     return res.status(200).json({ wishlistItem });
   } catch (err) {

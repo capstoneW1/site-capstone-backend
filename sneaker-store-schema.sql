@@ -11,7 +11,7 @@ CREATE TABLE users (
 CREATE TABLE wishlist (
     id          SERIAL PRIMARY KEY,
     user_id     INTEGER NOT NULL,
-    shoe_id     INTEGER NOT NULL,
+    shoe_id     TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

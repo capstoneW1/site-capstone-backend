@@ -1,33 +1,48 @@
-const express = require("express")
-const cors = require("cors")
-const morgan = require("morgan")
-const security = require("./middleware/security")
+const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+const security = require("./middleware/security.js");
+const { NotFoundError } = require("./utils/errors");
+
 const authRoutes = require("./routes/auth")
+const productRoutes = require("./routes/product.js");
+const wishlistRoutes = require("./routes/wishlist");
 
-const { NotFoundError } = require("./utils/errors")
+const app = express();
 
-const app = express()
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requeseted-With, Content-Type, Accept"
+  );
+  next();
+});
 
-app.use(cors())
-
-app.use(express.json())
-
-app.use(morgan("tiny"))
-
-//check if token exists in authorization header
-//if it does attatch dcecoded user to res.locals
-app.use(security.extractUserFromJwt)
+app.use(morgan("tiny"));
+app.use(express.json());
+app.use(cors());
+app.use(security.extractUserFromJwt);
 
 app.use("/auth", authRoutes)
+app.use("/product", productRoutes);
+app.use("/wishlist", wishlistRoutes);
+
+app.get("/", async (req, res, next) => {
+  res.status(200).json({ ping: "pong" });
+});
 
 app.use((req, res, next) => {
-    return next(new NotFoundError())
-})
+  return next(new NotFoundError());
+});
 
-app.use((err, req, res, next) => {
-    const status = err.status || 500
-    const message = err.message
-    return res.status(status).json({error: {message, status}})
-})
+app.use((error, req, res, next) => {
+  const status = error.status || 500;
+  const message = error.message;
 
-module.exports = app
+  return res.status(status).json({
+    error: { message, status },
+  });
+});
+
+module.exports = app;

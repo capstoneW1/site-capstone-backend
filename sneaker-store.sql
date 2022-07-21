@@ -5,4 +5,7 @@ DROP DATABASE sneaker_store;
 CREATE DATABASE sneaker_store;
 \connect sneaker_store
 
+SET CLIENT_ENCODING TO 'utf8';
 \i sneaker-store-schema.sql
+
+\i sneaker-store-seed.sql

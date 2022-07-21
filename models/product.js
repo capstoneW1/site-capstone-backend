@@ -1,83 +1,37 @@
 require("dotenv").config();
 const { BadRequestError, NotFoundError } = require("../utils/errors");
-const axios = require("axios");
-const fetch = require("node-fetch");
-const StockXAPI = require("stockx-api");
-const stockX = new StockXAPI();
-
-// import fetch from "node-fetch";
-
-// const { get } = require("../app");
+const db = require("../db");
 
 class Product {
   static async getAllProducts() {
-    const options = {
-      url: "https://the-sneaker-database.p.rapidapi.com/sneakers",
-      method: "GET",
-      params: { limit: 10 },
-      headers: {
-        "X-RapidAPI-Key": "b644290787mshfee7bb22060308dp13940bjsnf0ed4c49b267",
-        "X-RapidAPI-Host": "the-sneaker-database.p.rapidapi.com",
-      },
-    };
-    // await stockX.login({
-    //   user: "jenny.lee.site@codepath.org",
-    //   password: "Hello123-",
-    // });
-
-    // console.log("Successfully logged in!");
-
-    // const productList = await stockX.newSearchProducts("yeezy");
-    // return productList;
-    let response = null;
-    try {
-      response = await axios.request(options);
-      //   console.log("getProducts response:", response);
-      return response.data.results;
-    } catch (err) {
-      console.log(err);
-    }
+    // returns all products in shoes table
+    const results = await db.query(`SELECT * FROM shoes;`);
+    return results.rows;
   }
 
   static async getProductById(productId) {
-    const options = {
-      url: `https://the-sneaker-database.p.rapidapi.com/sneakers/${productId}`,
-      method: "GET",
-      params: { sneakerId: productId },
-      headers: {
-        "X-RapidAPI-Key": "b644290787mshfee7bb22060308dp13940bjsnf0ed4c49b267",
-        "X-RapidAPI-Host": "the-sneaker-database.p.rapidapi.com",
-      },
-    };
-    let response = null;
-    try {
-      response = await axios.request(options);
-      //   console.log("getProducts response:", response);
-      return response.data;
-    } catch (err) {
-      console.log(err);
-    }
+    // returns a single product by productId from shoes table.
+    // :param productId: product id of type integer
+    const results = await db.query(`SELECT * FROM shoes WHERE id=$1;`, [
+      productId,
+    ]);
+    return results.rows[0];
   }
 
-  static async searchProducts(q) {
-    const options = {
-      method: "GET",
-      url: "https://the-sneaker-database.p.rapidapi.com/search",
-      params: { limit: 10, query: q.query },
-      headers: {
-        "X-RapidAPI-Key": "b644290787mshfee7bb22060308dp13940bjsnf0ed4c49b267",
-        "X-RapidAPI-Host": "the-sneaker-database.p.rapidapi.com",
-      },
-    };
-
-    let response = null;
-    try {
-      response = await axios.request(options);
-      console.log("searchProducts response:", response);
-      return response.data.results;
-    } catch (err) {
-      console.log(err);
-    }
+  static async searchProducts(query) {
+    // returns a list of all products where search query is found
+    // in product name, brand, silhouette, description, or colorway
+    // of shoes table.
+    // :param query: search query of type text/string
+    const results = await db.query(
+      `SELECT * FROM shoes WHERE LOWER(name) LIKE LOWER($1) 
+      OR LOWER(brand) LIKE LOWER($1)
+      OR LOWER(silhouette) LIKE LOWER($1)
+      OR LOWER(description) LIKE LOWER($1) 
+      OR LOWER(colorway) LIKE LOWER($1);`,
+      [`%${query}%`]
+    );
+    return results.rows;
   }
 }
 

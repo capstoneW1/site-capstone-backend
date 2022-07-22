@@ -8,10 +8,35 @@ CREATE TABLE users (
     shoe_size   INTEGER DEFAULT 0
 );
 
+CREATE TABLE shoes (
+    id              SERIAL PRIMARY KEY,
+    name            TEXT NOT NULL,
+    brand           TEXT NOT NULL,
+    colorway        TEXT NOT NULL,
+    silhouette      TEXT NOT NULL,
+    release_year    TEXT NOT NULL,
+    release_date    DATE NOT NULL,
+    retail_price    NUMERIC (6, 2) NOT NULL,
+    market_price    NUMERIC (6, 2) NOT NULL,
+    description     TEXT NOT NULL,
+    image_url       TEXT NOT NULL,
+    current_bid     NUMERIC (6, 2) NOT NULL,
+    lowest_ask      NUMERIC (6, 2) NOT NULL,
+    total_sales     INTEGER NOT NULL
+);
+
+CREATE TABLE price_history (
+    id          SERIAL PRIMARY KEY,
+    shoe_id     INTEGER NOT NULL,
+    price       NUMERIC (5, 2) NOT NULL,
+    date        DATE NOT NULL,
+    FOREIGN KEY (shoe_id) REFERENCES shoes(id) ON DELETE CASCADE
+);
+
 CREATE TABLE wishlist (
     id          SERIAL PRIMARY KEY,
     user_id     INTEGER NOT NULL,
-    shoe_id     TEXT NOT NULL,
+    shoe_id     INTEGER NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

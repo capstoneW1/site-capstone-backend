@@ -4,21 +4,22 @@ const { BadRequestError, NotFoundError } = require("../utils/errors");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
+  // route to get a list of products from shoes table.
   try {
     const products = await Product.getAllProducts();
-    // console.log("products in routes", products);
     return res.status(200).json({ products });
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/:productId", async (req, res, next) => {
+router.get("/id/:productId", async (req, res, next) => {
+  // route to get a single product by productId.
+  // req.params.productId is of type integer
   try {
     const productId = req.params.productId;
-    const products = await Product.getProductById(productId);
-    // console.log("products in routes", products);
-    return res.status(200).json({ products });
+    const product = await Product.getProductById(productId);
+    return res.status(200).json({ product });
   } catch (err) {
     next(err);
   }
@@ -26,9 +27,9 @@ router.get("/:productId", async (req, res, next) => {
 
 router.get("/search", async (req, res, next) => {
   try {
+    // route to get a list of products given a search query.
     // req.body is an object in the format {"query": "Jordan"}
-    const products = await Product.searchProducts(req.body);
-    // console.log("products in routes", products);
+    const products = await Product.searchProducts(req.body.query);
     return res.status(200).json({ products });
   } catch (err) {
     next(err);

@@ -14,6 +14,17 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.delete("/", async (req, res, next) => {
+  try {
+    // req.body consists of
+    // { user_id, shoe_id }
+    await Wishlist.deleteWishlistItem(req.body);
+    return res.status(200).json("Item deleted");
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/", async (req, res, next) => {
   try {
     const userId = req.headers["user_id"];

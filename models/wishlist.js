@@ -27,6 +27,27 @@ class Wishlist {
     return res.rows;
   }
 
+    //Deletes item from wishlist in database
+  static async deleteWishlistItem(product) {
+    if (!product) {
+      throw new BadRequestError("product is null");
+    }
+
+    const requiredFields = ["shoe_id", "user_id"];
+    requiredFields.forEach((property) => {
+      if (!product.hasOwnProperty(property)) {
+        throw new BadRequestError(`Missing ${property} in request body.`);
+      }
+    });
+    const res = await db.query(
+      `
+      DELETE FROM wishlist 
+      WHERE shoe_id=$1 AND user_id=$2`,
+      [product.shoe_id, product.user_id]
+    );
+    return;
+  }
+
   static async listWishlistForUser(userId) {
     // Should list all wishlist instances in the database that
     //are owned by a particular user

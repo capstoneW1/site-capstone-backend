@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken")
 const { SECRET_KEY } = require("../config")
 
-const genereateToken = (data) => jwt.sign(data, SECRET_KEY, { expiresIn:"24h" })
+const genereateToken = (data) => jwt.sign(data, SECRET_KEY)
 
 const createUserJwt = (user) => {
     const payload = {

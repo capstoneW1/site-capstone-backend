@@ -25,7 +25,7 @@ router.get("/id/:productId", async (req, res, next) => {
   }
 });
 
-router.get("/search", async (req, res, next) => {
+router.post("/search", async (req, res, next) => {
   try {
     // route to get a list of products given a search query.
     // req.body is an object in the format {"query": "Jordan"}

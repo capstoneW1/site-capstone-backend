@@ -40,3 +40,21 @@ CREATE TABLE wishlist (
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE shoe_history(
+    id          SERIAL PRIMARY KEY,
+    shoe_id     INTEGER NOT NULL,
+    sep         INTEGER NOT NULL,  
+    oct         INTEGER NOT NULL,        
+    nov         INTEGER NOT NULL, 
+    dec         INTEGER NOT NULL, 
+    jan         INTEGER NOT NULL, 
+    feb         INTEGER NOT NULL, 
+    mar         INTEGER NOT NULL, 
+    apr         INTEGER NOT NULL, 
+    may         INTEGER NOT NULL, 
+    jun         INTEGER NOT NULL, 
+    jul         INTEGER NOT NULL, 
+    aug         INTEGER NOT NULL, 
+    FOREIGN KEY (shoe_id) REFERENCES shoes(id) ON DELETE CASCADE
+);

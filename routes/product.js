@@ -35,4 +35,18 @@ router.post("/search", async (req, res, next) => {
     next(err);
   }
 });
+
+router.post("/history", async (req, res, next) => {
+  //gets the shoe id from req.body and then call
+  //getShoeHistoryById that return a json of shoes
+  //price history
+  try {
+    const productId = req.body.shoe;
+    const history = await Product.getShoeHistoryById(productId);
+    return res.status(200).json({ history });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

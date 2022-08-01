@@ -60,6 +60,21 @@ class Wishlist {
     return res.rows;
   }
 
+  static async shoeExistsInWishlist(userId, shoe_id) {
+    // Should list all wishlist instances in the database that
+    //are owned by a particular user
+    if (!userId) {
+      throw new BadRequestError("userId is null");
+    }
+    if(!shoe_id) {
+      throw new BadRequestError("shoe_id is null");
+    }
+    const res = await db.query(`SELECT * FROM wishlist WHERE (user_id=$1 AND shoe_id=$2);`, [
+      userId, shoe_id,
+    ]);
+    return res.rows;
+  }
+
   static async fetchWishlistById(wishlistId) {
     //When supplied with a valid id, fetches a wishlist
     // instance from the database that matches that id.

@@ -38,6 +38,23 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/shoeInWishlist", async (req, res, next) => {
+  try {
+    const userId = req.headers["user_id"];
+    const shoe_id = req.headers["shoe_id"];
+    if (!userId) {
+      throw new BadRequestError("'user_id' header not passed in");
+    }
+    if (!shoe_id) {
+      throw new BadRequestError("'shoe_id' header not passed in");
+    }
+    const wishlist = await Wishlist.listWishlistForUser(userId, shoe_id);
+    return res.status(201).json({ wishlist });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/:wishlistId", async (req, res, next) => {
   try {
     //  It should send a JSON response back to the client

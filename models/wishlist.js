@@ -60,6 +60,25 @@ class Wishlist {
     return res.rows;
   }
 
+  static async shoeExistsInWishlist(product) {
+    // Should list all wishlist instances in the database that
+    //are owned by a particular user
+    if (!product) {
+      throw new BadRequestError("product is null");
+    }
+
+    const requiredFields = ["shoe_id", "user_id"];
+    requiredFields.forEach((property) => {
+      if (!product.hasOwnProperty(property)) {
+        throw new BadRequestError(`Missing ${property} in request body.`);
+      }
+    });
+    const res = await db.query(`SELECT * FROM wishlist WHERE user_id=$1 AND shoe_id=$2;`, [
+      product.user_id, product.shoe_id,
+    ]);
+    return res.rows;
+  }
+
   static async fetchWishlistById(wishlistId) {
     //When supplied with a valid id, fetches a wishlist
     // instance from the database that matches that id.

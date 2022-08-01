@@ -38,6 +38,16 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.post("/shoeInWishlist", async (req, res, next) => {
+  try {
+    
+    const wishlist = await Wishlist.shoeExistsInWishlist(req.body);
+    return res.status(201).json({ wishlist });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/:wishlistId", async (req, res, next) => {
   try {
     //  It should send a JSON response back to the client

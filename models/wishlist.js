@@ -60,17 +60,21 @@ class Wishlist {
     return res.rows;
   }
 
-  static async shoeExistsInWishlist(userId, shoe_id) {
+  static async shoeExistsInWishlist(product) {
     // Should list all wishlist instances in the database that
     //are owned by a particular user
-    if (!userId) {
-      throw new BadRequestError("userId is null");
+    if (!product) {
+      throw new BadRequestError("product is null");
     }
-    if(!shoe_id) {
-      throw new BadRequestError("shoe_id is null");
-    }
-    const res = await db.query(`SELECT * FROM wishlist WHERE (user_id=$1 AND shoe_id=$2);`, [
-      userId, shoe_id,
+
+    const requiredFields = ["shoe_id", "user_id"];
+    requiredFields.forEach((property) => {
+      if (!product.hasOwnProperty(property)) {
+        throw new BadRequestError(`Missing ${property} in request body.`);
+      }
+    });
+    const res = await db.query(`SELECT * FROM wishlist WHERE user_id=$1 AND shoe_id=$2;`, [
+      product.user_id, product.shoe_id,
     ]);
     return res.rows;
   }

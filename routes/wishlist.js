@@ -40,7 +40,6 @@ router.get("/", async (req, res, next) => {
 
 router.post("/shoeInWishlist", async (req, res, next) => {
   try {
-    console.log("productttttt", req.body)
     
     const wishlist = await Wishlist.shoeExistsInWishlist(req.body);
     return res.status(201).json({ wishlist });

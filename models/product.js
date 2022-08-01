@@ -33,6 +33,16 @@ class Product {
     );
     return results.rows;
   }
+
+  static async getShoeHistoryById(productId) {
+    //Gets shoe id from params and then is used to collect
+    //price history to display in a graph component
+    const results = await db.query(`SELECT sep, oct, nov, dec, jan, feb, mar, apr, may, jun, jul, aug FROM shoe_history WHERE shoe_id=$1;`, [
+      productId,
+    ]);
+    return results.rows[0];
+  }
+
 }
 
 module.exports = Product;

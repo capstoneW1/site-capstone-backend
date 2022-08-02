@@ -15,7 +15,7 @@ emailRouter.post("/send", (req, res) => {
     service: "gmail",
     auth: {
       user: "workday1codepath@gmail.com",
-      pass: "bteu gxod dqyz crjx",
+      pass: process.env.EMAIL_PASS,
     },
 
     from: "workday1codepath@gmail.com",

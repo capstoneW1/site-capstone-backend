@@ -23,7 +23,7 @@ app.use(function (req, res, next) {
 
 app.use(morgan("tiny"));
 app.use(express.json());
-
+res.writeHead(200, {'Access-Control-Allow-Origin': '*'});
 // this variable allows us to make requests with nodemailer
 const corsOptions = {
   origin: "*",

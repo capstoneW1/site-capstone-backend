@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const security = require("./middleware/security.js");
 const { NotFoundError } = require("./utils/errors");
-const { API_BASE_URL } = require("./constants")
+const { API_BASE_URL } = require("./constants");
 
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/product.js");
@@ -26,7 +26,7 @@ app.use(express.json());
 
 // this variable allows us to make requests with nodemailer
 const corsOptions = {
-  origin: "*",
+  origin: "http://localhost:3000",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
